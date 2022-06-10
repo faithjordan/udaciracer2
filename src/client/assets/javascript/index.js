@@ -1,7 +1,7 @@
 // PROVIDED CODE BELOW (LINES 1 - 80) DO NOT REMOVE
 
 // The store will hold all information needed globally
-let store = {
+const store = {
 	track_id: undefined,
 	player_id: undefined,
 	race_id: undefined,
@@ -77,26 +77,26 @@ async function handleCreateRace() {
 	// render starting UI
 	try{
 			
-			// TODO - Get player_id and track_id from the store
-			let player_id = store.player_id;
-			let track_id = store.track_id;
+			// Get player_id and track_id from the store
+			const player_id = store.player_id;
+			const track_id = store.track_id;
 			
-			// const race = TODO - invoke the API call to create the race, then save the result
+			//Invoke the API call to create the race, then save the result
 			const race = await createRace(player_id, track_id);
 
 			renderAt('#race', renderRaceStartView(race.Track, race.Cars))
 
-			// TODO - update the store with the race id
+			// Update the store with the race id
 			// For the API to work properly, the race id should be race id - 1
 			store.race_id = race.ID - 1;
 
 			// The race has been created, now start the countdown
-			// TODO - call the async function runCountdown
+			// Call the async function runCountdown
 			await runCountdown();
 
-			// TODO - call the async function startRace
+			// Call the async function startRace
 			await startRace(store.race_id);
-			// TODO - call the async function runRace
+			// Call the async function runRace
 			await runRace(store.race_id)
 	}catch(err){
 		console.log("Problem with the handleCreateRace function::", err);
@@ -106,11 +106,10 @@ async function handleCreateRace() {
 async function runRace(raceID) {
 	try{
 		return new Promise((resolve) => {
-		// TODO - use Javascript's built in setInterval method to get race info every 500ms
+		// Use setInterval method to get race info every 500ms
 			const raceInterval = setInterval( async()=> {
 				/* 
-			TODO - if the race info status property is "in-progress", update the leaderboard by calling:
-
+			if the race info status property is "in-progress", update the leaderboard by calling:
 			renderAt('#leaderBoard', raceProgress(res.positions))
 		*/		await getRace(raceID)
 					.then((res) =>{
@@ -136,11 +135,11 @@ async function runCountdown() {
 		let timer = 3
 
 		return new Promise(resolve => {
-			// TODO - use Javascript's built in setInterval method to count down once per second
+			//Use setInterval method to count down once per second
 			const countDown = setInterval( ()=>{
 				// run this DOM manipulation to decrement the countdown for the user
 				document.getElementById('big-numbers').innerHTML = --timer;
-				// TODO - if the countdown is done, clear the interval, resolve the promise, and return
+				// If the countdown is done, clear the interval, resolve the promise, and return
 				if(timer<=0){
 				clearInterval(countDown);
 				resolve();
@@ -165,7 +164,7 @@ function handleSelectPodRacer(target) {
 	// add class selected to current target
 	target.classList.add('selected')
 
-	// TODO - save the selected racer to the store
+	// Save the selected racer to the store
 	store.player_id = target.id;
 }
 
@@ -181,7 +180,7 @@ function handleSelectTrack(target) {
 	// add class selected to current target
 	target.classList.add('selected')
 
-	// TODO - save the selected track id to the store
+	// Save the selected track id to the store
 	store.track_id = target.id;
 	console.log(store.track_id);
 }
@@ -189,7 +188,7 @@ function handleSelectTrack(target) {
 function handleAccelerate() {
 	try{
 		console.log("accelerate button clicked");
-		// TODO - Invoke the API call to accelerate
+		// Invoke the API call to accelerate
 		accelerate(store.race_id)
 	}catch(err){
 		console.log(`Problems with handleAccelerate(): ${err}`);
@@ -299,7 +298,7 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
-	let userPlayer = positions.find(e => e.id === parseInt(store.player_id));
+	const userPlayer = positions.find(e => e.id === parseInt(store.player_id));
 	userPlayer.driver_name += " (you)";
 
 	positions = positions.sort((a, b) => (a.segment > b.segment) ? -1 : 1)
@@ -348,7 +347,7 @@ function defaultFetchOpts() {
 	}
 }
 
-// TODO - Make a fetch call (with error handling!) to each of the following API endpoints 
+// Make a fetch call (with error handling!) to each of the following API endpoints 
 
 // GET request to `${SERVER}/api/tracks`
 function getTracks() {
